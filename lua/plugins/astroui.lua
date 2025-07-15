@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroUI provides the basis for configuring the AstroNvim User Interface
 -- Configuration documentation can be found with `:h astroui`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -11,7 +9,18 @@ return {
   ---@type AstroUIOpts
   opts = {
     -- change colorscheme
-    colorscheme = "astrodark",
+    colorscheme = "github_dark_default",
+
+    status = {
+      colors = function(hl)
+        local palette = require("github-theme.palette").load "github_dark_default"
+        hl.bg = palette.black.base
+        hl.section_bg = palette.black.base
+        hl.fg = palette.white.base
+        hl.section_fg = palette.white.base
+        return hl
+      end,
+    },
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     highlights = {
       init = { -- this table overrides highlights in all themes
