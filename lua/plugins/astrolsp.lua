@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -36,6 +34,12 @@ return {
       -- filter = function(client) -- fully override the default formatting function
       --   return true
       -- end
+      filter = function(client) -- fully override the default formatting function
+        -- disable when formatting via :EslintFixAll is possible
+        if client.name == "vtsls" and vim.fn.exists ":EslintFixAll" then return false end
+
+        return true
+      end,
     },
     -- enable servers that you already have installed without mason
     servers = {
@@ -45,6 +49,11 @@ return {
     ---@diagnostic disable: missing-fields
     config = {
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      eslint = {
+        settings = {
+          workingDirectory = { mode = "auto" },
+        },
+      },
     },
     -- customize how language servers are attached
     handlers = {
@@ -57,6 +66,7 @@ return {
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
+      eslint_fix_on_save = false,
       -- first key is the `augroup` to add the auto commands to (:h augroup)
       lsp_codelens_refresh = {
         -- Optional condition to create/delete auto command group
